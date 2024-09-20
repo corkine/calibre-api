@@ -21,8 +21,14 @@ jobs:
     - name: Run tests
       run: cargo test --verbose
 
+    - name: List target directory
+      run: ls -R target/release
+
     - name: Upload artifact
       uses: actions/upload-artifact@v4
       with:
         name: calibre-api
-        path: target/release/calibre-api
+        path: |
+          target/release/calibre-api*
+          !target/release/calibre-api.d
+        if-no-files-found: error
