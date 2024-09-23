@@ -1,9 +1,9 @@
+mod auth;
 mod config;
 mod controller;
 mod db;
-mod exception;
 mod encrypt;
-mod auth;
+mod exception;
 #[macro_use]
 mod dev;
 
