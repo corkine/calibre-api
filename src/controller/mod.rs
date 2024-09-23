@@ -11,7 +11,8 @@ mod resource;
 
 #[get("/")]
 async fn welcome() -> impl Responder {
-    json!({"message":"Welcome to the Book API"})
+    let version = env!("CARGO_PKG_VERSION");
+    json!({"message":"Welcome to the Book API", "version": version})
         .to_string()
         .customize()
         .insert_header(("Content-Type", "application/json"))
