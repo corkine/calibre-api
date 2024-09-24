@@ -16,6 +16,8 @@ pub enum ApiError {
     NotFound,
     #[error("Not found file: {0}")]
     NotFoundFile(String),
+    #[error("Network error: {0}")]
+    NetworkError(String),
 }
 
 impl ResponseError for ApiError {
