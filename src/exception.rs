@@ -12,6 +12,10 @@ pub enum ApiError {
     DbError(String),
     #[error("Unauthorized")]
     Unauthorized,
+    #[error("Resource Not found")]
+    NotFound,
+    #[error("Not found file: {0}")]
+    NotFoundFile(String),
 }
 
 impl ResponseError for ApiError {
@@ -24,6 +28,7 @@ impl ResponseError for ApiError {
             ApiError::Unauthorized => HttpResponse::Unauthorized()
                 .append_header(("WWW-Authenticate", "Basic realm=\"Secure Area\""))
                 .json(json),
+            ApiError::NotFound => HttpResponse::build(StatusCode::NOT_FOUND).json(json),
             _ => HttpResponse::build(StatusCode::INTERNAL_SERVER_ERROR).json(json),
         }
     }

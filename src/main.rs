@@ -16,6 +16,7 @@ use env_logger::Env;
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
     env_logger::init_from_env(Env::default().default_filter_or("info"));
+    println!("Book Api version: {}", env!("CARGO_PKG_VERSION"));
     let json_config = web::JsonConfig::default()
         .limit(1024)
         .error_handler(|err, _req| {

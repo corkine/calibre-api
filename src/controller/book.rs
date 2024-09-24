@@ -6,14 +6,14 @@ use chrono::NaiveDateTime;
 use serde::Serialize;
 
 #[derive(sqlx::FromRow, Serialize)]
-struct Book {
+pub struct Book {
     id: i32,
-    title: String,
+    pub title: String,
     timestamp: NaiveDateTime,
     uuid: String,
     has_cover: bool,
     last_modified: NaiveDateTime,
-    path: String
+    pub path: String
 }
 
 #[get("")]
