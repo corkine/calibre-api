@@ -7,6 +7,7 @@ on:
     branches: [ "master" ]
   workflow_dispatch:
 
+
 env:
   CARGO_TERM_COLOR: always
 
@@ -38,3 +39,25 @@ jobs:
           target/x86_64-unknown-linux-musl/release/calibre-api*
           !target/x86_64-unknown-linux-musl/release/calibre-api.d
         if-no-files-found: error
+
+    - name: Download ci-transfer
+      run: |
+        wget https://github.com/corkine/ci-transfer/releases/latest/download/ci-transfer
+        chmod +x ci-transfer
+
+    - name: Run ci-transfer
+      env:
+        DESTINATION: ${{ secrets.DESTINATION }}
+      run: |
+        ./ci-transfer -s target/x86_64-unknown-linux-musl/release/calibre-api -d '$DESTINATION' -c "
+          pid=\$(pgrep -f calibre-api)
+          if [ ! -z \"\$pid\" ]; then
+            kill \$pid
+            echo 'Killed existing calibre-api process'
+          else
+            echo 'No existing calibre-api process found'
+          fi
+          chmod +x /root/calibre-web/calibre-api
+          nohup /root/calibre-web/calibre-api > /root/calibre-api.log 2>&1 &
+          echo 'Started new calibre-api process'
+        "
