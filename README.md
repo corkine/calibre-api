@@ -9,7 +9,8 @@ Calibre Web 的一个基于 Rust 实现的服务端 API，用于提供 Calibre W
 
 ```bash
 cargo run --release
-
+# or use container
+docker build -t calibre-api:latest .
 docker run -it --rm -p 8080:8080 -v ../app.db:/calibre-web/app.db -v ../books:/calibre-data localhost/calibre-api:0.1.4
 ```
 
