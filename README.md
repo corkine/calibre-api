@@ -4,8 +4,9 @@ Calibre Web 的一个基于 Rust 实现的服务端 API，用于提供 Calibre W
 
 ## Run
 
-- 需要在同级目录下包含 app.db，其 Calibre Web 的 user 数据库执行 Basic 验证，带缓存。
+- 需要在同级目录下包含 app.db，其 Calibre Web 的 user 数据库执行 Basic 验证，带缓存（仅支持 0.6.21 版本）。
 - 需要在父级目录下包含 calibre-web 文件夹，其中包含 metadata.db 以及图书文件夹，API 数据由此数据库提供。
+- 如果找不到 app.db 和 metadata.db，应用程序将等待直到它们出现而非直接 painc（针对新部署 Calibre Web 而言）。
 
 ```bash
 cargo run --release

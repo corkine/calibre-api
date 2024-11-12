@@ -1,6 +1,6 @@
-use std::{ops::Deref, sync::Arc};
+use std::{ops::Deref, path::Path, sync::Arc};
 
-use actix_web::{http::Error, web, FromRequest};
+use actix_web::{http::Error, rt::time, web, FromRequest};
 use futures::future::{ready, Ready};
 use sqlx::{sqlite::SqlitePoolOptions, SqlitePool};
 
@@ -14,6 +14,8 @@ pub struct DbState {
 
 impl DbState {
     pub async fn connect() -> Arc<DbState> {
+        DbState::wait_for_file(DATA_DB).await;
+        DbState::wait_for_file(WEB_DB).await;
         let pool = SqlitePoolOptions::new()
             .max_connections(1)
             .connect(format!("sqlite:{DATA_DB}").as_str())
@@ -29,6 +31,12 @@ impl DbState {
             web_db: pool2,
         };
         Arc::new(db_state)
+    }
+    async fn wait_for_file(path: &str) {
+        while !Path::new(path).exists() {
+            eprintln!("Waiting for database file: {}", path);
+            time::sleep(std::time::Duration::from_secs(5)).await;
+        }
     }
 }
 
